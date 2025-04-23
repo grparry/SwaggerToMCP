@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Parry"
+    given-names: "Grant"
+title: "SwaggerToMCP"
+version: 1.0.0
+date-released: 2025-04-22
+url: "https://github.com/grparry/SwaggerToMCP"
+repository-code: "https://github.com/grparry/SwaggerToMCP"
+license: MIT
+type: software
+description: "A CLI tool that converts Swagger/OpenAPI JSON files into Anthropic's Model Context Protocol (MCP) format."
+keywords:
+  - swagger
+  - openapi
+  - mcp
+  - anthropic
+  - claude
+  - api
+  - conversion
+  - tool

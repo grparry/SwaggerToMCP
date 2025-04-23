@@ -1,0 +1,132 @@
+{
+  "tools": [
+    {
+      "name": "getCurrentWeather",
+      "description": "Get current weather",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "description": "City name"
+          },
+          "units": {
+            "type": "string",
+            "description": "Temperature units (celsius, fahrenheit)",
+            "enum": [
+              "celsius",
+              "fahrenheit"
+            ]
+          }
+        },
+        "required": [
+          "city"
+        ]
+      },
+      "annotations": {
+        "tags": [
+          "weather"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "City not found",
+            "content": {
+              "application/octet-stream": {}
+            }
+          }
+        },
+        "x-openapi-original": {
+          "path": "/current/{city}",
+          "method": "get",
+          "operationId": "getCurrentWeather"
+        },
+        "servers": [
+          {
+            "url": "https://api.weatherservice.example/v1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "getWeatherForecast",
+      "description": "Get weather forecast",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "description": "City name"
+          },
+          "days": {
+            "type": "integer",
+            "description": "Number of days (1-5)"
+          },
+          "units": {
+            "type": "string",
+            "description": "Temperature units (celsius, fahrenheit)",
+            "enum": [
+              "celsius",
+              "fahrenheit"
+            ]
+          }
+        },
+        "required": [
+          "city"
+        ]
+      },
+      "annotations": {
+        "tags": [
+          "weather"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "City not found",
+            "content": {
+              "application/octet-stream": {}
+            }
+          }
+        },
+        "x-openapi-original": {
+          "path": "/forecast/{city}",
+          "method": "get",
+          "operationId": "getWeatherForecast"
+        },
+        "servers": [
+          {
+            "url": "https://api.weatherservice.example/v1"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "title": "Weather API",
+    "description": "API for retrieving weather forecasts and current conditions",
+    "version": "1.0.0",
+    "servers": [
+      {
+        "url": "https://api.weatherservice.example/v1"
+      }
+    ]
+  }
+}

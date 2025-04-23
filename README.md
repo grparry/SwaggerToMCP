@@ -1,5 +1,9 @@
 # SwaggerToMCP
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![.NET](https://img.shields.io/badge/.NET-9.0-512BD4)](https://dotnet.microsoft.com/download)
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-6BA539)](https://www.openapis.org/)
+
 A CLI tool that converts Swagger/OpenAPI JSON files into Anthropic's Model Context Protocol (MCP) format.
 
 > **Project Summary**: SwaggerToMCP bridges the gap between OpenAPI specifications and Anthropic's Claude AI by transforming API definitions into the MCP format. This enables seamless integration of external APIs with Claude, allowing the AI to interact with these services through well-defined tool interfaces.
@@ -42,7 +46,9 @@ dotnet run --project SwaggerToMCP.Cli -- --input ./path/to/swagger.json --output
 
 ## Contributing
 
-Contributions are welcome! If you'd like to improve SwaggerToMCP, please feel free to:
+Contributions are welcome! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed guidelines on how to contribute to this project.
+
+If you'd like to improve SwaggerToMCP, please feel free to:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -56,6 +62,14 @@ Please ensure your code follows the existing style and includes appropriate test
 
 For detailed documentation, advanced usage examples, and technical details, please see the [detailed README](SwaggerToMCP/README.md) in the SwaggerToMCP directory.
 
+## Examples
+
+Check out the [examples directory](SwaggerToMCP/examples) for sample Swagger/OpenAPI files and their corresponding MCP outputs. These examples demonstrate how to use the tool with different API specifications and how to integrate the generated MCP files with Claude.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Citation
+
+If you use this software in your research or projects, please cite it using the information in the [CITATION.cff](CITATION.cff) file.

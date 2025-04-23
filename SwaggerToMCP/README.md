@@ -6,6 +6,8 @@ A CLI tool that converts Swagger/OpenAPI JSON files into Anthropic's Model Conte
 
 SwaggerToMCP is a command-line tool that takes a Swagger/OpenAPI JSON file as input and converts it to a valid MCPContext JSON file. The tool preserves all metadata from the OpenAPI input and outputs in compliance with Anthropic's Model Context Protocol (MCP) schema.
 
+For a visual representation of the conversion process, see the [conversion process diagram](docs/conversion-process.md).
+
 ### What is MCP?
 
 Model Context Protocol (MCP) is Anthropic's structured format for defining tools that Claude can use. MCP enables Claude to interact with external systems through well-defined interfaces, allowing the AI to call functions, APIs, and services with proper parameter validation. This protocol standardizes how tools are described to Claude, ensuring consistent and reliable tool usage across different applications.
@@ -69,6 +71,8 @@ The tool maps OpenAPI fields to MCP fields according to the following mapping:
 | Custom Extensions    | `annotations` (preserve all unmapped metadata)         |
 
 ## Example Input and Output
+
+For more examples, check out the [examples directory](examples/) which contains sample Swagger files and their corresponding MCP outputs.
 
 ### Sample Swagger Input
 

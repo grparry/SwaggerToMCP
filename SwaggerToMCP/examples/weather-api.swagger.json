@@ -1,0 +1,120 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Weather API",
+    "description": "API for retrieving weather forecasts and current conditions",
+    "version": "1.0.0"
+  },
+  "host": "api.weatherservice.example",
+  "basePath": "/v1",
+  "schemes": ["https"],
+  "paths": {
+    "/current/{city}": {
+      "get": {
+        "tags": ["weather"],
+        "summary": "Get current weather",
+        "description": "Returns current weather conditions for a specified city",
+        "operationId": "getCurrentWeather",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "path",
+            "description": "City name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "units",
+            "in": "query",
+            "description": "Temperature units (celsius, fahrenheit)",
+            "required": false,
+            "type": "string",
+            "enum": ["celsius", "fahrenheit"],
+            "default": "celsius"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": { "type": "string" },
+                "temperature": { "type": "number" },
+                "conditions": { "type": "string" },
+                "humidity": { "type": "integer" },
+                "windSpeed": { "type": "number" }
+              }
+            }
+          },
+          "404": {
+            "description": "City not found"
+          }
+        }
+      }
+    },
+    "/forecast/{city}": {
+      "get": {
+        "tags": ["weather"],
+        "summary": "Get weather forecast",
+        "description": "Returns 5-day weather forecast for a specified city",
+        "operationId": "getWeatherForecast",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "path",
+            "description": "City name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days (1-5)",
+            "required": false,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 3
+          },
+          {
+            "name": "units",
+            "in": "query",
+            "description": "Temperature units (celsius, fahrenheit)",
+            "required": false,
+            "type": "string",
+            "enum": ["celsius", "fahrenheit"],
+            "default": "celsius"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": { "type": "string" },
+                "forecast": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "date": { "type": "string", "format": "date" },
+                      "highTemp": { "type": "number" },
+                      "lowTemp": { "type": "number" },
+                      "conditions": { "type": "string" },
+                      "precipitation": { "type": "number" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "City not found"
+          }
+        }
+      }
+    }
+  }
+}
