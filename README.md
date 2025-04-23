@@ -16,3 +16,7 @@ SwaggerToMCP is a command-line tool that takes a Swagger/OpenAPI JSON file as in
 ## Getting Started
 
 For detailed documentation, installation instructions, and usage examples, please see the [detailed README](SwaggerToMCP/README.md) in the SwaggerToMCP directory.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
