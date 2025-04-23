@@ -1,0 +1,156 @@
+{
+  "tools": [
+    {
+      "name": "getPetById",
+      "description": "Find pet by ID",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "petId": {
+            "type": "integer",
+            "description": "ID of pet to return",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "petId"
+        ]
+      },
+      "annotations": {
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "tags": [
+          "pet"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
+          }
+        },
+        "x-openapi-original": {
+          "path": "/pet/{petId}",
+          "method": "get"
+        },
+        "servers": [
+          {
+            "url": "https://petstore.swagger.io/v1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "addPet",
+      "description": "Add a new pet to the store",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "photoUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "pet status in the store",
+            "enum": [
+              "available",
+              "pending",
+              "sold"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "photoUrls"
+        ]
+      },
+      "annotations": {
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ],
+        "tags": [
+          "pet"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "x-openapi-original": {
+          "path": "/pet",
+          "method": "post"
+        },
+        "servers": [
+          {
+            "url": "https://petstore.swagger.io/v1"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "title": "Swagger Petstore",
+    "description": "This is a sample server Petstore server.",
+    "version": "1.0.0",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "termsOfService": "http://swagger.io/terms/"
+  }
+}
