@@ -52,3 +52,6 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+SwaggerToMCP/SwaggerToMCP/tests/.DS_Store
+.gitignore
+SwaggerToMCP/SwaggerToMCP/tests/SwaggerToMCP.Tests/.DS_Store
