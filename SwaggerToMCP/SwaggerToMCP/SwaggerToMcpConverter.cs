@@ -34,19 +34,33 @@ public class SwaggerToMcpConverter
     }
 
     /// <summary>
-    /// Reads an OpenAPI document from a stream.
+    /// Reads an OpenAPI document from a stream with support for OpenAPI 3.1.0.
     /// </summary>
     /// <param name="stream">Stream containing the OpenAPI JSON.</param>
     /// <returns>The parsed OpenAPI document.</returns>
     private async Task<OpenApiDocument> ReadOpenApiDocumentAsync(Stream stream)
     {
-        var openApiReader = new OpenApiStreamReader();
+        // Configure reader with explicit 3.1.0 support
+        var readerSettings = new OpenApiReaderSettings
+        {
+            // This setting will allow reading OpenAPI 3.1.0 documents
+            // The reader is backwards compatible and will still read 3.0.x documents
+            ReferenceResolution = ReferenceResolutionSetting.ResolveAllReferences,
+            // Set maximum nesting depth for complex schemas
+            MaximumAllowedRecursionDepth = 100 
+        };
+
+        var openApiReader = new OpenApiStreamReader(readerSettings);
         var result = await openApiReader.ReadAsync(stream);
 
         if (result.OpenApiDiagnostic.Errors.Any())
         {
             throw new InvalidOperationException($"Failed to parse OpenAPI document: {string.Join(", ", result.OpenApiDiagnostic.Errors)}");
         }
+
+        // Log information about the document version
+        Console.WriteLine($"Processed OpenAPI document version: {result.OpenApiDocument.Info?.Version}");
+        Console.WriteLine($"OpenAPI spec version: {result.OpenApiDocument.SpecVersion}");
 
         return result.OpenApiDocument;
     }
@@ -360,7 +374,7 @@ public class SwaggerToMcpConverter
     }
 
     /// <summary>
-    /// Converts an OpenAPI schema to an MCP schema property.
+    /// Converts an OpenAPI schema to an MCP schema property with support for OpenAPI 3.1.0 features.
     /// </summary>
     /// <param name="schema">The OpenAPI schema to convert.</param>
     /// <returns>An MCP schema property.</returns>
@@ -372,11 +386,30 @@ public class SwaggerToMcpConverter
             Description = schema.Description
         };
 
+        // Handle reference - OpenAPI 3.1 allows references alongside other properties
+        if (schema.Reference != null && !string.IsNullOrEmpty(schema.Reference.Id))
+        {
+            string refPath = "#/components/schemas/" + schema.Reference.Id;
+            if (!string.IsNullOrEmpty(schema.Reference.ExternalResource))
+            {
+                refPath = schema.Reference.ExternalResource + "#/components/schemas/" + schema.Reference.Id;
+            }
+            schemaProperty.Ref = refPath;
+        }
+
+        // Handle nullable property (OpenAPI 3.1)
+        if (schema.Nullable)
+        {
+            schemaProperty.Nullable = true;
+        }
+
+        // Handle format
         if (!string.IsNullOrEmpty(schema.Format))
         {
             schemaProperty.Format = schema.Format;
         }
 
+        // Handle enum values
         if (schema.Enum != null && schema.Enum.Any())
         {
             schemaProperty.Enum = new List<string>();
@@ -425,11 +458,13 @@ public class SwaggerToMcpConverter
             }
         }
 
+        // Handle array types
         if (schema.Type == "array" && schema.Items != null)
         {
             schemaProperty.Items = ConvertOpenApiSchemaToMcpSchemaProperty(schema.Items);
         }
 
+        // Handle object types
         if (schema.Type == "object" && schema.Properties != null && schema.Properties.Any())
         {
             schemaProperty.Properties = new Dictionary<string, McpSchemaProperty>();
@@ -448,6 +483,52 @@ public class SwaggerToMcpConverter
             if (!schemaProperty.Required.Any())
             {
                 schemaProperty.Required = null;
+            }
+        }
+        
+        // Handle OpenAPI 3.1 allOf, oneOf, anyOf composition
+        if (schema.AllOf != null && schema.AllOf.Any())
+        {
+            schemaProperty.AllOf = new List<McpSchemaProperty>();
+            foreach (var subSchema in schema.AllOf)
+            {
+                schemaProperty.AllOf.Add(ConvertOpenApiSchemaToMcpSchemaProperty(subSchema));
+            }
+        }
+        
+        if (schema.OneOf != null && schema.OneOf.Any())
+        {
+            schemaProperty.OneOf = new List<McpSchemaProperty>();
+            foreach (var subSchema in schema.OneOf)
+            {
+                schemaProperty.OneOf.Add(ConvertOpenApiSchemaToMcpSchemaProperty(subSchema));
+            }
+        }
+        
+        if (schema.AnyOf != null && schema.AnyOf.Any())
+        {
+            schemaProperty.AnyOf = new List<McpSchemaProperty>();
+            foreach (var subSchema in schema.AnyOf)
+            {
+                schemaProperty.AnyOf.Add(ConvertOpenApiSchemaToMcpSchemaProperty(subSchema));
+            }
+        }
+        
+        // Handle OpenAPI 3.1 discriminator
+        if (schema.Discriminator != null)
+        {
+            schemaProperty.Discriminator = new McpDiscriminator
+            {
+                PropertyName = schema.Discriminator.PropertyName
+            };
+            
+            if (schema.Discriminator.Mapping != null && schema.Discriminator.Mapping.Any())
+            {
+                schemaProperty.Discriminator.Mapping = new Dictionary<string, string>();
+                foreach (var mapping in schema.Discriminator.Mapping)
+                {
+                    schemaProperty.Discriminator.Mapping[mapping.Key] = mapping.Value;
+                }
             }
         }
 

@@ -1,0 +1,160 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI 3.1 Test API",
+    "description": "Testing OpenAPI 3.1 features with SwaggerToMCP converter",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/test31": {
+      "post": {
+        "operationId": "testOpenApi31Features",
+        "summary": "Test OpenAPI 3.1 features",
+        "description": "Endpoint with OpenAPI 3.1 specific schema features",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TestRequest": {
+        "type": "object",
+        "properties": {
+          "nullableField": {
+            "type": ["string", "null"],
+            "description": "A field that can be null (OpenAPI 3.1 feature)"
+          },
+          "mixedTypeField": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "description": "A field that can be string or number"
+          },
+          "refWithProperties": {
+            "$ref": "#/components/schemas/BaseType",
+            "description": "A reference with additional properties (OpenAPI 3.1 feature)"
+          },
+          "discriminatedType": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DogType"
+              },
+              {
+                "$ref": "#/components/schemas/CatType"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "petType",
+              "mapping": {
+                "dog": "#/components/schemas/DogType",
+                "cat": "#/components/schemas/CatType"
+              }
+            }
+          }
+        },
+        "required": ["discriminatedType"]
+      },
+      "TestResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "BaseType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "DogType": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseType"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "petType": {
+                "type": "string",
+                "enum": ["dog"]
+              },
+              "bark": {
+                "type": "boolean"
+              },
+              "breed": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CatType": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseType"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "petType": {
+                "type": "string",
+                "enum": ["cat"]
+              },
+              "purr": {
+                "type": "boolean"
+              },
+              "color": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

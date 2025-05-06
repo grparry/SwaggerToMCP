@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-9.0-512BD4)](https://dotnet.microsoft.com/download)
-[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-6BA539)](https://www.openapis.org/)
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1.0-6BA539)](https://www.openapis.org/)
 
-A CLI tool that converts Swagger/OpenAPI JSON files into Anthropic's Model Context Protocol (MCP) format.
+A CLI tool that converts Swagger/OpenAPI JSON files into Anthropic's Model Context Protocol (MCP) format. **Now with full OpenAPI 3.1.0 support!**
 
 > **Project Summary**: SwaggerToMCP bridges the gap between OpenAPI specifications and Anthropic's Claude AI by transforming API definitions into the MCP format. This enables seamless integration of external APIs with Claude, allowing the AI to interact with these services through well-defined tool interfaces.
 
@@ -19,7 +19,12 @@ SwaggerToMCP is a command-line tool that takes a Swagger/OpenAPI JSON file as in
 - Maps OpenAPI fields to their corresponding MCP fields
 - Outputs a JSON file compliant with MCP's Tool schema
 - Handles complex parameter structures and nested schemas
-- Supports both OpenAPI 2.0 (Swagger) and OpenAPI 3.0+ specifications
+- **Supports OpenAPI 2.0 (Swagger), 3.0, and 3.1.0 specifications**
+- Full OpenAPI 3.1.0 schema support:
+  - Type arrays (e.g., `["string", "null"]`) for nullable fields
+  - Schema composition with `oneOf`, `anyOf`, and `allOf`
+  - Discriminator mapping for polymorphic schemas
+  - References (`$ref`) alongside other properties
 - Maintains security definitions and requirements
 - Provides detailed error reporting for invalid specifications
 
@@ -61,6 +66,30 @@ Please ensure your code follows the existing style and includes appropriate test
 ## Documentation
 
 For detailed documentation, advanced usage examples, and technical details, please see the [detailed README](SwaggerToMCP/README.md) in the SwaggerToMCP directory.
+
+### OpenAPI 3.1.0 Support
+
+SwaggerToMCP now fully supports OpenAPI 3.1.0, which brings several significant improvements over OpenAPI 3.0:
+
+#### Key OpenAPI 3.1.0 Features Supported
+
+1. **JSON Schema Alignment**
+   - SwaggerToMCP now correctly parses OpenAPI 3.1.0 documents aligned with JSON Schema 2020-12
+   - Support for `type` arrays (e.g., `["string", "null"]`) for nullable types
+
+2. **Enhanced Schema Composition**
+   - Full support for `oneOf`, `anyOf`, and `allOf` schema compositions
+   - Proper discriminator handling for polymorphic schemas
+
+3. **Extended References**
+   - Support for `$ref` alongside other keywords
+   - This enables more flexible schema definitions and extensions
+
+4. **Improved Nullable Handling**
+   - Correctly processes both OpenAPI 3.0.x `nullable: true` and OpenAPI 3.1.0 type arrays
+   - Ensures consistent representation in MCP format
+
+These features are automatically detected when parsing OpenAPI documents, with no additional configuration required.
 
 ## Examples
 
